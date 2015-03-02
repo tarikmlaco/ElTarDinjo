@@ -1,8 +1,8 @@
 var express = require('express'),
     path = require('path'),
     http = require('http'),
-    wine = require('./routes/wines');
-
+    wine = require('./routes/wines'),
+    user = require('./routes/users');
 var app = express();
 
 app.configure(function () {
@@ -13,6 +13,10 @@ app.configure(function () {
 });
 
 app.get('/wines', wine.findAll);
+app.get('/users', user.findAll);
+app.get('/test', function(req, res){
+        res.redirect('/#users');
+    });
 app.get('/wines/:id', wine.findById);
 app.post('/wines', wine.addWine);
 app.put('/wines/:id', wine.updateWine);
