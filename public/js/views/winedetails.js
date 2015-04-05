@@ -1,4 +1,4 @@
-window.WineView = Backbone.View.extend({
+window.OglasView = Backbone.View.extend({
 
     initialize: function () {
         this.render();
@@ -52,8 +52,8 @@ window.WineView = Backbone.View.extend({
         this.model.save(null, {
             success: function (model) {
                 self.render();
-                app.navigate('wines/' + model.id, false);
-                utils.showAlert('Success!', 'Wine saved successfully', 'alert-success');
+                app.navigate('oglasi/' + model.id, false);
+                utils.showAlert('Success!', 'Oglas saved successfully', 'alert-success');
             },
             error: function () {
                 utils.showAlert('Error', 'An error occurred while trying to delete this item', 'alert-error');
@@ -64,7 +64,7 @@ window.WineView = Backbone.View.extend({
     deleteWine: function () {
         this.model.destroy({
             success: function () {
-                alert('Wine deleted successfully');
+                alert('Oglas deleted successfully');
                 window.history.back();
             }
         });

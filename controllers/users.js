@@ -25,8 +25,8 @@ db.open(function(err, db) {
 exports.findById = function(req, res) {
     var id = req.params.id;
     var name= req.params.name;
-    console.log('Retrieving wine: ' + id);
-    db.collection('wines', function(err, collection) {
+    console.log('Retrieving oglas: ' + id);
+    db.collection('oglasi', function(err, collection) {
 
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
             res.send(item);
@@ -40,7 +40,7 @@ exports.findById = function(req, res) {
 
 exports.findByName = function(req, res) {
     var name= req.params.name;
-    db.collection('wines', function(err, collection) {
+    db.collection('oglasi', function(err, collection) {
         collection.find({'name':name}, function(err, item){
             res.send(item);
         });
@@ -64,17 +64,17 @@ var populateDB = function() {
     var users = [
         {
             name: "Mujo",
-            year: "2009",
+            cijena: "2009",
             grapes: "Grenache / Syrah"
         },
         {
             name: "Suljo",
-            year: "2006",
+            cijena: "2006",
             grapes: "Tempranillo"
         },
         {
             name: "Tarik",
-            year: "2010",
+            cijena: "2010",
             grapes: "Sauvignon Blanc"
         }];
 

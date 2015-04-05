@@ -1,6 +1,6 @@
 {
     "name": "wine-cellar",
-    "description": "Wine Cellar Application",
+    "description": "Oglas Cellar Application",
     "version": "0.0.1",
     "private": true,
     "dependencies": {
