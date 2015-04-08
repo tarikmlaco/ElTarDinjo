@@ -4,22 +4,30 @@
 var mongo = require('mongodb');
 
 var Server = mongo.Server,
-    Db = mongo.Db,
+    //Db = mongo.Db,
     BSON = mongo.BSONPure;
+var databaseUrl = "mongodb://kirija:kirija@ds061621.mongolab.com:61621/kirijaba";
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-db = new Db('winedb', server, {safe: true});
+//require mongoose node module
+var mongoose = require('mongoose');
 
-db.open(function(err, db) {
-    if(!err) {
-        console.log("Connected to 'winedb' database, users");
-        db.collection('users', {safe:true}, function(err, collection) {
-            if (err) {
-                console.log("The 'users' collection doesn't exist. Creating it with sample data...");
-                populateDB();
-            }
-        });
-    }
+//connect to mongodb database
+var conn = mongoose.createConnection(databaseUrl);
+var db = conn.db;
+//attach lister to connected event
+mongoose.connection.once('connected', function() {
+    console.log("Connected to 'kirija' database");
+    db.collection('users', {safe:true}, function(err, collection) {
+        //if (err) {
+        console.log("The 'users' collection doesn't exist. Creating it with sample data...");
+        populateDB();
+        //}
+        //if (result) {
+        // else {console.log('collection exists');}
+        //});
+
+    });
+  // conn.close();
 });
 
 exports.findById = function(req, res) {
