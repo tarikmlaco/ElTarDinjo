@@ -16,11 +16,21 @@ var AppRouter = Backbone.Router.extend({
         $('.header').html(this.headerView.el);
     },
 
+    /*
+
     home: function (id) {
         if (!this.homeView) {
             this.homeView = new HomeView();
         }
         $('#content').html(this.homeView.el);
+        this.headerView.selectMenuItem('home-menu');
+    },
+*/
+    home: function (id) {
+        if (!this.carouselView) {
+            this.carouselView = new CarouselView();
+        }
+        $('#content').html(this.carouselView.el);
         this.headerView.selectMenuItem('home-menu');
     },
 
@@ -74,7 +84,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'OglasView', 'OglasListItemView','UserListItemView', 'AboutView', 'LoginView'], function() {
+utils.loadTemplate(['HomeView', 'HeaderView', 'OglasView', 'OglasListItemView','UserListItemView', 'AboutView', 'LoginView', 'CarouselView'], function() {
     app = new AppRouter();
     Backbone.history.start();
 });

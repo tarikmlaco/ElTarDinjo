@@ -13,14 +13,14 @@ app.configure(function () {
 });
 
 app.get('/oglasi', oglas.findAll);
-app.get('/users', user.findAll);
+//app.get('/users', user.findAll);
 app.get('/test', function(req, res){
         res.redirect('/#users');
     });
 app.get('/oglasi/:id', oglas.findById);
-app.post('/oglasi', oglas.addWine);
-app.put('/oglasi/:id', oglas.updateWine);
-app.delete('/oglasi/:id', oglas.deleteWine);
+app.post('/oglasi', oglas.addOglas);
+app.put('/oglasi/:id', oglas.updateOglas);
+app.delete('/oglasi/:id', oglas.deleteOglas);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log("Express server listening on port " + app.get('port'));

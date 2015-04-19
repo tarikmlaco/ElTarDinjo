@@ -8,7 +8,9 @@
         "mongodb": "*",
         "socket.io": "0.9.10",
         "mongoose": "*",
-        "mongodb-migrations": "*"
+        "mongodb-migrations": "*",
+        "bcrypt-nodejs": "*",
+        "rand-token": "*"
     },
     "engines": {
         "node": "0.10.20",

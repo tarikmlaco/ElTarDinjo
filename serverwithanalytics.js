@@ -33,9 +33,9 @@ server.listen(app.get('port'), function () {
 
 app.get('/oglasi', wine.findAll);
 app.get('/oglasi/:id', wine.findById);
-app.post('/oglasi', wine.addWine);
-app.put('/oglasi/:id', wine.updateWine);
-app.delete('/oglasi/:id', wine.deleteWine);
+app.post('/oglasi', wine.addOglas);
+app.put('/oglasi/:id', wine.updateOglas);
+app.delete('/oglasi/:id', wine.deleteOglas);
 
 io.sockets.on('connection', function (socket) {
 

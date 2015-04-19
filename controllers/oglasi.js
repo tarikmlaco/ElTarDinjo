@@ -4,7 +4,8 @@ var Server = mongo.Server,
    // Db = mongo.Db,
     BSON = mongo.BSONPure;
 
-var databaseUrl = "mongodb://kirija:kirija@ds061621.mongolab.com:61621/kirijaba";
+//var databaseUrl = "mongodb://kirija:kirija@ds061621.mongolab.com:61621/kirijaba";
+var databaseUrl = "mongodb://localhost:27017/kirijaba";
 
 //require mongoose node module
 var mongoose = require('mongoose');
@@ -14,16 +15,23 @@ var conn = mongoose.createConnection(databaseUrl);
 var db = conn.db;
     //mongoose.connection.db;
 //attach lister to connected event
-mongoose.connection.once('connected', function() {
+db.once('open', function() {
         console.log("Connected to 'kirija' database");
         db.collection('oglasi', {safe:true}, function(err, collection) {
-            if (collection) {console.log('IMAAAAAAAA'); console.log(collection);}
-                    console.log("The 'oglasi' collection doesn't exist. Creating it with sample data...");
-                    populateDB();
-                //}
-                //if (result) {
-                // else {console.log('collection exists');}
-            //});
+            if (err)
+            console.log(err);
+            collection.find(function(err, items){
+               if(err)
+                console.log("Error!");
+               if(items == null)
+                console.log("Collection is empty");
+               else(console.log(items));
+            });
+                //console.log(collection);
+                console.log("The 'oglasi' collection doesn't exist. Creating it with sample data...");
+                populateDB();
+
+            //else(console.log("Collection already exists! Continuing."));
 
         });
     //conn.close();
@@ -33,7 +41,12 @@ exports.findById = function(req, res) {
     var id = req.params.id;
     console.log('Retrieving oglas: ' + id);
     db.collection('oglasi', function(err, collection) {
-        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+        collection.findOne({'_id': new mongoose.Types.ObjectId(id)}, function(err, item) {
+            if(err){
+            res.send(err);
+            console.log("Id not found!");}
+            console.log("Id found!");
+            console.log(item);
             res.send(item);
         });
     });
@@ -47,11 +60,11 @@ exports.findAll = function(req, res) {
     });
 };
 
-exports.addWine = function(req, res) {
-    var wine = req.body;
-    console.log('Adding oglas: ' + JSON.stringify(wine));
+exports.addOglas = function(req, res) {
+    var oglas = req.body;
+    console.log('Adding oglas: ' + JSON.stringify(oglas));
     db.collection('oglasi', function(err, collection) {
-        collection.insert(wine, {safe:true}, function(err, result) {
+        collection.insert(oglas, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred'});
             } else {
@@ -62,30 +75,30 @@ exports.addWine = function(req, res) {
     });
 }
 
-exports.updateWine = function(req, res) {
+exports.updateOglas = function(req, res) {
     var id = req.params.id;
-    var wine = req.body;
-    delete wine._id;
+    var oglas = req.body;
+    delete oglas._id;
     console.log('Updating oglas: ' + id);
-    console.log(JSON.stringify(wine));
+    console.log(JSON.stringify(oglas));
     db.collection('oglasi', function(err, collection) {
-        collection.update({'_id':new BSON.ObjectID(id)}, wine, {safe:true}, function(err, result) {
+        collection.update({'_id': new mongoose.Types.ObjectId(id)}, oglas, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating oglas: ' + err);
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' document(s) updated');
-                res.send(wine);
+                res.send(oglas);
             }
         });
     });
 }
 
-exports.deleteWine = function(req, res) {
+exports.deleteOglas = function(req, res) {
     var id = req.params.id;
     console.log('Deleting oglas: ' + id);
     db.collection('oglasi', function(err, collection) {
-        collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
+        collection.remove({'_id': new mongoose.Types.ObjectId(id)}, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred - ' + err});
             } else {
@@ -122,7 +135,10 @@ var populateDB = function() {
     }];
 
     db.collection('oglasi', function(err, collection) {
-        collection.insert(oglasi, {safe:true}, function(err, result) {});
+        collection.insert(oglasi, {safe:true}, function(err, result) {
+            if(err)
+            console.log(err);
+        });
     });
 
 };

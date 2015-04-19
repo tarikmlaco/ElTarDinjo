@@ -12,7 +12,7 @@ window.OglasView = Backbone.View.extend({
     events: {
         "change"        : "change",
         "click .save"   : "beforeSave",
-        "click .delete" : "deleteWine",
+        "click .delete" : "deleteOglas",
         "drop #picture" : "dropHandler"
     },
 
@@ -61,7 +61,7 @@ window.OglasView = Backbone.View.extend({
         });
     },
 
-    deleteWine: function () {
+    deleteOglas: function () {
         this.model.destroy({
             success: function () {
                 alert('Oglas deleted successfully');

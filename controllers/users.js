@@ -1,93 +1,67 @@
 /**
  * Created by Elvis on 3/2/2015.
  */
-var mongo = require('mongodb');
+var User = require('../models/user'),
+    uid = require('rand-token').uid;
 
-var Server = mongo.Server,
-    //Db = mongo.Db,
-    BSON = mongo.BSONPure;
-var databaseUrl = "mongodb://kirija:kirija@ds061621.mongolab.com:61621/kirijaba";
-
-//require mongoose node module
-var mongoose = require('mongoose');
-
-//connect to mongodb database
-var conn = mongoose.createConnection(databaseUrl);
-var db = conn.db;
-//attach lister to connected event
-mongoose.connection.once('connected', function() {
-    console.log("Connected to 'kirija' database");
-    db.collection('users', {safe:true}, function(err, collection) {
-        //if (err) {
-        console.log("The 'users' collection doesn't exist. Creating it with sample data...");
-        populateDB();
-        //}
-        //if (result) {
-        // else {console.log('collection exists');}
-        //});
-
+exports.postUsers = function(req, res){
+    var user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        token: uid(16)
     });
-  // conn.close();
-});
 
-exports.findById = function(req, res) {
-    var id = req.params.id;
-    var name= req.params.name;
-    console.log('Retrieving oglas: ' + id);
-    db.collection('oglasi', function(err, collection) {
+    user.save(function(err){
+        if(err) {
+            res.json({message: 'Error creating user, username probably exists.'});
+            console.log(err);
+        }
+        else
+        res.json({message: 'User saved!'});
+    });
+};
 
-        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-            res.send(item);
-        });
+exports.loginUser = function(req, res){
+    User.findOne({username: req.body.username}, function(err, user){
+        if(err)
+            res.send(err);
+        user.verifyPassword(req.body.password, function(err, isMatch){
+            if(err)
+                res.json({error: err});
+            if(!isMatch) {
+                res.json({error: 'Wrong password!'});
+                console.log('Wrong password!');
+            }
+            else{
+                console.log('User logged in!');
+            }
+            });
+         });
+};
 
-        collection.find({'_name':new BSON.ObjectID(id)}, function(err, item){
-            res.send(item);
+exports.logoutUser=function(req, res){
+    User.findOne({username: req.body.username}, function(err, user){
+        if(err)
+            res.send(err);
+        user.verifyPassword(req.body.password, function(err, isMatch){
+            if(err)
+                res.json({error: err});
+            if(!isMatch) {
+                res.json({error: 'Wrong password!'});
+                console.log('Wrong password!');
+            }
+            else
+            {
+                res.send('User logged out!');
+            }
         });
     });
 };
 
-exports.findByName = function(req, res) {
-    var name= req.params.name;
-    db.collection('oglasi', function(err, collection) {
-        collection.find({'name':name}, function(err, item){
-            res.send(item);
-        });
+exports.getUsers = function(req, res){
+    User.find(function(err, users){
+        if(err)
+            res.send(err);
+        res.json(users);
     });
-};
-
-exports.findAll = function(req, res) {
-    db.collection('users', function(err, collection) {
-        collection.find().toArray(function(err, items) {
-            res.send(items);
-        });
-    });
-};
-
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-// Populate database with sample data -- Only used once: the first time the application is started.
-// You'd typically not find this code in a real-life app, since the database would already exist.
-var populateDB = function() {
-
-    var users = [
-        {
-            name: "Mujo",
-            cijena: "2009",
-            grapes: "Grenache / Syrah"
-        },
-        {
-            name: "Suljo",
-            cijena: "2006",
-            grapes: "Tempranillo"
-        },
-        {
-            name: "Tarik",
-            cijena: "2010",
-            grapes: "Sauvignon Blanc"
-        }];
-
-    db.collection('users', function(err, collection) {
-        collection.insert(users, {safe:true}, function(err, result) {});
-    });
-
 };
