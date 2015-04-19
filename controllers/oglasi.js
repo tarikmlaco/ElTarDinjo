@@ -1,20 +1,21 @@
-var mongo = require('mongodb');
+//var mongo = require('mongodb');
+/*
 
 var Server = mongo.Server,
    // Db = mongo.Db,
     BSON = mongo.BSONPure;
+*/
 
 //var databaseUrl = "mongodb://kirija:kirija@ds061621.mongolab.com:61621/kirijaba";
-var databaseUrl = "mongodb://localhost:27017/kirijaba";
+//var databaseUrl = "mongodb://localhost:27017/kirijaba";
 
 //require mongoose node module
 var mongoose = require('mongoose');
-
+var Oglas = require('../models/oglas')
 //connect to mongodb database
-var conn = mongoose.createConnection(databaseUrl);
-var db = conn.db;
     //mongoose.connection.db;
 //attach lister to connected event
+/*
 db.once('open', function() {
         console.log("Connected to 'kirija' database");
         db.collection('oglasi', {safe:true}, function(err, collection) {
@@ -35,7 +36,7 @@ db.once('open', function() {
 
         });
     //conn.close();
-});
+});*/
 
 exports.findById = function(req, res) {
     var id = req.params.id;
@@ -53,10 +54,11 @@ exports.findById = function(req, res) {
 };
 
 exports.findAll = function(req, res) {
-    db.collection('oglasi', function(err, collection) {
-        collection.find().toArray(function(err, items) {
-            res.send(items);
-        });
+    Oglas.find(function(err, items) {
+        if(err)
+            res.json(err);
+          res.json(items);
+
     });
 };
 
@@ -112,6 +114,7 @@ exports.deleteOglas = function(req, res) {
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Populate database with sample data -- Only used once: the first time the application is started.
 // You'd typically not find this code in a real-life app, since the database would already exist.
+/*
 var populateDB = function() {
 
     var oglasi = [
@@ -141,4 +144,4 @@ var populateDB = function() {
         });
     });
 
-};
+};*/

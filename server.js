@@ -1,6 +1,7 @@
 var express = require('express'),
     path = require('path'),
     http = require('http'),
+    mongoose = require('mongoose'),
     oglas = require('./controllers/oglasi'),
     user = require('./controllers/users');
 var app = express();
@@ -12,8 +13,10 @@ app.configure(function () {
     app.use(express.static(path.join(__dirname, 'public')));
 });
 
+mongoose.connect('mongodb://localhost:27017/kirijaba')
+
 app.get('/oglasi', oglas.findAll);
-//app.get('/users', user.findAll);
+app.get('/users', user.getUsers);
 app.get('/test', function(req, res){
         res.redirect('/#users');
     });
