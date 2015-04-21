@@ -1,55 +1,22 @@
-//var mongo = require('mongodb');
-/*
-
-var Server = mongo.Server,
-   // Db = mongo.Db,
-    BSON = mongo.BSONPure;
-*/
-
-//var databaseUrl = "mongodb://kirija:kirija@ds061621.mongolab.com:61621/kirijaba";
-//var databaseUrl = "mongodb://localhost:27017/kirijaba";
-
 //require mongoose node module
 var mongoose = require('mongoose');
 var Oglas = require('../models/oglas')
 //connect to mongodb database
     //mongoose.connection.db;
 //attach lister to connected event
-/*
-db.once('open', function() {
-        console.log("Connected to 'kirija' database");
-        db.collection('oglasi', {safe:true}, function(err, collection) {
-            if (err)
-            console.log(err);
-            collection.find(function(err, items){
-               if(err)
-                console.log("Error!");
-               if(items == null)
-                console.log("Collection is empty");
-               else(console.log(items));
-            });
-                //console.log(collection);
-                console.log("The 'oglasi' collection doesn't exist. Creating it with sample data...");
-                populateDB();
 
-            //else(console.log("Collection already exists! Continuing."));
-
-        });
-    //conn.close();
-});*/
 
 exports.findById = function(req, res) {
     var id = req.params.id;
     console.log('Retrieving oglas: ' + id);
-    db.collection('oglasi', function(err, collection) {
-        collection.findOne({'_id': new mongoose.Types.ObjectId(id)}, function(err, item) {
+    Oglas.findOne({_id: mongoose.Types.ObjectId(id)}, function(err, oglas) {
             if(err){
+            console.log("Id not found!");
             res.send(err);
-            console.log("Id not found!");}
+            }
             console.log("Id found!");
-            console.log(item);
-            res.send(item);
-        });
+            console.log(oglas);
+            res.json(oglas);
     });
 };
 
@@ -63,19 +30,21 @@ exports.findAll = function(req, res) {
 };
 
 exports.addOglas = function(req, res) {
-    var oglas = req.body;
-    console.log('Adding oglas: ' + JSON.stringify(oglas));
-    db.collection('oglasi', function(err, collection) {
-        collection.insert(oglas, {safe:true}, function(err, result) {
+    var oglas = new Oglas();
+        oglas.name = req.body.name;
+        oglas.description = req.body.description;
+        oglas.cijena = req.body.cijena;
+        oglas.picture = req.body.picture;
+        console.log('Adding oglas: ' + JSON.stringify(oglas));
+        oglas.save(function(err){
             if (err) {
                 res.send({'error':'An error has occurred'});
             } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
-                res.send(result[0]);
+                console.log('Success: ' + JSON.stringify(oglas));
+                res.send(oglas);
             }
         });
-    });
-}
+};
 
 exports.updateOglas = function(req, res) {
     var id = req.params.id;

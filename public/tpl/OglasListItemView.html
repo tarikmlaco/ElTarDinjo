@@ -1,5 +1,5 @@
-<a href="#oglasi/<%= _id %>" class="thumbnail plain" style="text-align: center;">
-    <img src="<%= picture === null ? 'pics/generic.jpg' : 'pics/' + picture %>"  width="100" alt="" align="left">
-    <h5><%= name %></h5>
-    <b><%= cijena %> KM</b><br/>
-</a>
+<!--<a href="#oglasi/<%= _id %>" class="list-group-item" style="text-align: center;">-->
+    <img src="<%= picture === null ? 'pics/generic.jpg' : 'pics/' + picture %>"  width="50" alt="" align="left">
+    <h4 class="list-group-item-heading" style="min-height: 100px; text-align: center"><a href="#oglasi/<%= _id %>"><%= name %></a></h4>
+    <p class="list-group-item-text"><%= cijena %> KM</b><br/>
+<!--</a>-->

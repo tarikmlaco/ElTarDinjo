@@ -10,7 +10,7 @@ window.OglasListView = Backbone.View.extend({
         var startPos = (this.options.page - 1) * 8;
         var endPos = Math.min(startPos + 8, len);
 
-        $(this.el).html('<ul class="thumbnails"></ul>');
+        $(this.el).html('<h3>Stambeni prostori</h3><div class="list-group thumbnails"></div>');
 
         for (var i = startPos; i < endPos; i++) {
             $('.thumbnails', this.el).append(new OglasListItemView({model: oglasi[i]}).render().el);
@@ -23,8 +23,8 @@ window.OglasListView = Backbone.View.extend({
 });
 
 window.OglasListItemView = Backbone.View.extend({
-
-    tagName: "li",
+    tagName: 'a',
+    className: "list-group-item",
 
     initialize: function () {
         this.model.bind("change", this.render, this);
