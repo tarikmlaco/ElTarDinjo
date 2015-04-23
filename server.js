@@ -13,7 +13,8 @@ app.configure(function () {
     app.use(express.static(path.join(__dirname, 'public')));
 });
 
-mongoose.connect('mongodb://localhost:27017/kirijaba')
+//mongoose.connect('mongodb://localhost:27017/kirijaba')
+    mongoose.connect('mongodb://kirija:kirija@ds061621.mongolab.com:61621/kirijaba');
 
 app.get('/oglasi', oglas.findAll);
 app.get('/users', user.getUsers);

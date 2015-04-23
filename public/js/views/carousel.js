@@ -10,7 +10,6 @@ window.CarouselView = Backbone.View.extend({
     initialize: function(options) {
         $(this.el).html(this.template());
         isDone=true;
-        //_.bindAll(this);
         this.items = _.map(this.$('.carousel-item').hide(), function(i) { return i; });
         this.current = 0;
         this.render();
@@ -25,7 +24,7 @@ window.CarouselView = Backbone.View.extend({
             $(this.items[this.current]).fadeOut(function () {
                 this.current = this.current - 1;
                 if (this.current === -1) {
-                    this.current = this.items.length - 1
+                    this.current = this.items.length - 1;
                 }
                 $(this.items[this.current]).fadeIn(function(){
                     isDone=true;
@@ -39,7 +38,7 @@ window.CarouselView = Backbone.View.extend({
             $(this.items[this.current]).fadeOut(function () {
                 this.current = this.current + 1;
                 if (this.current === this.items.length) {
-                    this.current = 0
+                    this.current = 0;
                 }
                 $(this.items[this.current]).fadeIn(function(){
                     isDone=true;

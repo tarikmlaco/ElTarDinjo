@@ -30,7 +30,7 @@ var AppRouter = Backbone.Router.extend({
         if (!this.carouselView) {
             this.carouselView = new CarouselView();
         }
-        $('#content').html(this.carouselView.el);
+        this.carouselView.setElement('#content').initialize();
         this.headerView.selectMenuItem('home-menu');
     },
 
@@ -55,14 +55,18 @@ var AppRouter = Backbone.Router.extend({
     oglasDetails: function (id) {
         var oglas = new Oglas({_id: id});
         oglas.fetch({success: function(){
-            $("#content").html(new OglasView({model: oglas}).el);
+            this.oglasView= new OglasView({model: oglas});
+//            $("#content").html(new OglasView({model: oglas}).el);
+            this.oglasView.setElement('#content').render();
         }});
         this.headerView.selectMenuItem();
     },
 
 	addOglas: function() {
         var oglas = new Oglas();
-        $('#content').html(new OglasView({model: oglas}).el);
+        this.oglasView = new OglasView({model: oglas});
+//        $('#content').html(new OglasView({model: oglas}).el);
+        this.oglasView.setElement('#content').render();
         this.headerView.selectMenuItem('add-menu');
 	},
 
@@ -70,7 +74,8 @@ var AppRouter = Backbone.Router.extend({
         if (!this.aboutView) {
             this.aboutView = new AboutView();
         }
-        $('#content').html(this.aboutView.el);
+//        $('#content').html(this.aboutView.el);
+        this.aboutView.setElement('#content').render();
         this.headerView.selectMenuItem('about-menu');
     },
 
@@ -78,7 +83,8 @@ var AppRouter = Backbone.Router.extend({
         if (!this.loginView) {
             this.loginView = new LoginView();
         }
-        $('#content').html(this.loginView.el);
+//        $('#content').html(this.loginView.el);
+        this.loginView.setElement("#content").render();
         this.headerView.selectMenuItem('about-menu');
     }
 
