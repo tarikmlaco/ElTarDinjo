@@ -3,6 +3,7 @@
  */
 var User = require('../models/user'),
     uid = require('rand-token').uid;
+    utils = require('../utils');
 
 exports.postUsers = function(req, res){
     var user = new User({
@@ -33,6 +34,7 @@ exports.loginUser = function(req, res){
                 console.log('Wrong password!');
             }
             else{
+                utils.createUserSession(req, res, user);
                 console.log('User logged in!');
             }
             });
